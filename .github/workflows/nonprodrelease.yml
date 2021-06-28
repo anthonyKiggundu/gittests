@@ -56,12 +56,13 @@ jobs:
       - name: get tag
         id: tagit
         uses: actions/upload-artifact@v2
-#        run: echo ::set-output name=gittag::$(git describe --abbrev=0 --tags)
-      - shell: bash
-        run:  echo $(git describe --abbrev=0 --tags|sed 's/nonprod/prod/g') >> gitdetails.txt
         with:
           name: gittagging
           path: gitdetails.txt
+
+#        run: echo ::set-output name=gittag::$(git describe --abbrev=0 --tags)
+      - shell: bash
+        run:  echo $(git describe --abbrev=0 --tags|sed 's/nonprod/prod/g') >> gitdetails.txt
 
  #     - name: create ver
 #        id: newvar
