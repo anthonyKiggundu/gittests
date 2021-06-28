@@ -55,22 +55,39 @@ jobs:
         
       - name: get tag
         id: tagit
-        run: echo ::set-output name=gittag::$(git describe --abbrev=0 --tags)
+        uses: actions/upload-artifact@v2
+#        run: echo ::set-output name=gittag::$(git describe --abbrev=0 --tags)
+        shell: bash
+        run:  echo $(git describe --abbrev=0 --tags|sed 's/nonprod/prod/g') >> gitdetails.txt
+        with:
+          name: gittagging
+          path: gitdetails.txt
 
-      - name: create ver
-        id: newvar
-        run: echo ::set-output name=vers::$(git describe --abbrev=0 --tags | cut -d '-' -f2)
+ #     - name: create ver
+#        id: newvar
+#        run: echo ::set-output name=vers::$(git describe --abbrev=0 --tags | cut -d '-' -f2)
+#        uses: actions/upload-artifact@v2
+ #       shell: bash
+#        run: expr git describe --abbrev=0 --tags | cut -d '-' -f2 >> gitdetails.txt
 
-      - name: create tag
-        id: newtag
-        run: echo ::set-output name=newTag::"monitor-"${{steps.newvar.outputs.vers}}"-prod"
+#      - name: create tag
+#        id: newtag
+#        run: echo ::set-output name=newTag::"monitor-"${{steps.newvar.outputs.vers}}"-prod"
 
       - name: final tag
         id: ftag
-#        if: github.event.action == 'closed' #&& github.event.pull_request.merged == true  #&& ${{ github.ref == 'refs/heads/master' }}
+        uses: actions/upload-artifact@v2
+        with:
+          name: gittagging
+ 
+        if: github.event.action == 'closed' #&& github.event.pull_request.merged == true  #&& ${{ github.ref == 'refs/heads/master' }}
+        shell: bash
         run: |
-          hub tag ${{steps.newtag.outputs.newTag}} HEAD
-          hub push origin ${{steps.newtag.outputs.newTag}}
+          prodTag=`cat gitdetails.txt
+          hub tag $prodTag HEAD
+          hub push origin $prodTag
+#          hub tag ${{steps.newtag.outputs.newTag}} HEAD
+#          hub push origin ${{steps.newtag.outputs.newTag}}
 
 # hub tag -a ${{steps.newtag.outputs.newTag}} 
 #        run: echo ::set-output name=newTag::"monitor-"${{steps.ctag.outputs.vers}}"-prod"
