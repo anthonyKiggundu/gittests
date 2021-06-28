@@ -64,7 +64,7 @@ jobs:
         id: ctag
         run: |
           echo ::set-output name=vers::$(git describe --abbrev=0 --tags | cut -d '-' -f2)
-          echo ::set-output name=newTag::"monitor-"${{vers}}"-prod"
+          echo ::set-output name=newTag::"monitor-"${{steps.ctag.outputs.vers}}"-prod"
 
       - name: final tag
         id: ftag
