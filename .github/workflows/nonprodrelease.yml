@@ -35,7 +35,6 @@ jobs:
         id: ctag
         shell: bash
         run: echo ::set-output name=BRANCH_NAME::$(git rev-parse --abbrev-ref HEAD)
-      - name: set version
 #        run: echo "BRANCH_NAME=$(echo ${GITHUB_HEAD_REF} | tr / -)" >> $GITHUB_ENV
       - name: Semantic Release
         uses: cycjimmy/semantic-release-action@v2
