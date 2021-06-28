@@ -51,7 +51,7 @@ jobs:
           GIT_COMMITTER_NAME: metro-digital-bot
           GIT_COMMITTER_EMAIL: info@metro.digital
         
-#      - run: echo "$OUTPUTS"
+      - run: echo "$OUTPUTS"
         env:
           OUTPUTS: ${{ toJson(steps.semantic.outputs) }}  
           
