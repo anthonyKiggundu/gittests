@@ -51,22 +51,25 @@ jobs:
           GIT_COMMITTER_NAME: metro-digital-bot
           GIT_COMMITTER_EMAIL: info@metro.digital
         
-      - run: echo "$OUTPUTS"
+#      - run: echo "$OUTPUTS"
         env:
           OUTPUTS: ${{ toJson(steps.semantic.outputs) }}  
           
-#      - name: get tag
-#        id: tagit
-#        run: echo ::set-output name=gittag::$(git describe --abbrev=0 --tags)
+      - name: get tag
+        id: tagit
+        run: echo ::set-output name=gittag::$(git describe --abbrev=0 --tags)
 
-#      - name: create tag
-#        id: ctag
-#        run: echo ::set-output name=vers::$(git describe --abbrev=0 --tags | cut -d '-' -f2)
+      - name: create tag
+        id: ctag
+        run: echo ::set-output name=vers::$(git describe --abbrev=0 --tags | cut -d '-' -f2)
 
-#      - name: final tag
-#        id: ftag
-#        run: echo ::set-output name=newTag::"monitor-"${{steps.ctag.outputs.vers}}"-prod"
-
+      - name: final tag
+        id: ftag
+        if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true
+        run: echo ::set-output name=newTag::"monitor-"${{steps.ctag.outputs.vers}}"-prod"
+      - name: use hub as helper
+        id: prodTag
+        run: hub tag ${{steps.ftag.outputs.newTag}} HEAD
 # --------------------------------
 #if: steps.semantic.outputs.new_release_published == 'true'
 #      - run: |
