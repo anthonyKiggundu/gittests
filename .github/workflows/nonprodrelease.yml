@@ -2,15 +2,16 @@
 
 name: Tagging nonprod
 # Controls when the action will run. 
-on:
+on: 
   # Triggers the workflow on push or pull request events but only for the master branch
   push:
     branches: 
-      - '*' #'*'
-    paths: 
-      - '.github/nonprod/'
-    tags:
-      - 'monitor-v-nonprod'
+      - '*' 
+  pull_request:
+    branches:
+      - '*'
+#    paths: 
+#      - '.github/nonprod/'
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -38,7 +39,7 @@ jobs:
         uses: cycjimmy/semantic-release-action@v2
         id: semantic
         with:
-          semantic_version: 15
+          semantic_version: 16
           extra_plugins: |
             @semantic-release/changelog
             @semantic-release/git
@@ -55,18 +56,27 @@ jobs:
         env:
           OUTPUTS: ${{ toJson(steps.semantic.outputs) }}  
           
-#      - name: get tag
-#        id: tagit
-#        run: echo ::set-output name=gittag::$(git describe --abbrev=0 --tags)
+      - name: get tag
+        id: tagit
+        run: echo ::set-output name=gittag::$(git describe --abbrev=0 --tags)
 
-#      - name: create tag
-#        id: ctag
-#        run: echo ::set-output name=vers::$(git describe --abbrev=0 --tags | cut -d '-' -f2)
+      - name: create ver
+        id: newvar
+        run: echo ::set-output name=vers::$(git describe --abbrev=0 --tags | cut -d '-' -f2)
 
-#      - name: final tag
-#        id: ftag
+      - name: create tag
+        id: newtag
+        run: echo ::set-output name=newTag::"monitor-"${{steps.newvar.outputs.vers}}"-prod"
+
+      - name: final tag
+        id: ftag
+        if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true && ${{ github.ref == 'refs/heads/master' }}
+        run: hub tag ${{steps.newtag.outputs.newTag}} HEAD
+
 #        run: echo ::set-output name=newTag::"monitor-"${{steps.ctag.outputs.vers}}"-prod"
-
+#      - name: use hub as helper
+#        id: prodTag
+#        run: hub tag ${{steps.ftag.outputs.newTag}} HEAD
 # --------------------------------
 #if: steps.semantic.outputs.new_release_published == 'true'
 #      - run: |
