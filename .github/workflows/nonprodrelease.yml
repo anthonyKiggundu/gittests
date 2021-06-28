@@ -68,9 +68,9 @@ jobs:
       - name: set env vars
         id: setvars
         run: | 
-          echo "{GIT_TAG}={steps.tagit.outputs.gittag}" >> $GITHUB_ENV
-          echo "{VER_NUM}={steps.newvar.outputs.vers}" >> $GITHUB_ENV
-          echo "{NEW_TAG}={steps.newtag.outputs.newTag}" >> $GITHUB_ENV
+          echo "{GIT_TAG}=${{steps.tagit.outputs.gittag}}" >> $GITHUB_ENV
+          echo "{VER_NUM}=${{steps.newvar.outputs.vers}}" >> $GITHUB_ENV
+          echo "{NEW_TAG}=${{steps.newtag.outputs.newTag}}" >> $GITHUB_ENV
 
       - name: final tag
         id: ftag
