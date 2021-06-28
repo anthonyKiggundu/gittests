@@ -4,13 +4,11 @@ name: Tagging nonprod
 # Controls when the action will run. 
 on:
   # Triggers the workflow on push or pull request events but only for the master branch
-  push:
+  [push, pull_request]:
     branches: 
       - '*' #'*'
     paths: 
       - '.github/nonprod/'
-    tags:
-      - 'monitor-v-nonprod'
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -61,15 +59,19 @@ jobs:
 
       - name: create tag
         id: ctag
-        run: echo ::set-output name=vers::$(git describe --abbrev=0 --tags | cut -d '-' -f2)
+        run: |
+          echo ::set-output name=vers::$(git describe --abbrev=0 --tags | cut -d '-' -f2)
+          echo ::set-output name=newTag::"monitor-"${{vers}}"-prod"
 
       - name: final tag
         id: ftag
         if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true
-        run: echo ::set-output name=newTag::"monitor-"${{steps.ctag.outputs.vers}}"-prod"
-      - name: use hub as helper
-        id: prodTag
-        run: hub tag ${{steps.ftag.outputs.newTag}} HEAD
+        run: hub tag ${{steps.ctag.outputs.newTag}} HEAD
+
+#        run: echo ::set-output name=newTag::"monitor-"${{steps.ctag.outputs.vers}}"-prod"
+#      - name: use hub as helper
+#        id: prodTag
+#        run: hub tag ${{steps.ftag.outputs.newTag}} HEAD
 # --------------------------------
 #if: steps.semantic.outputs.new_release_published == 'true'
 #      - run: |
