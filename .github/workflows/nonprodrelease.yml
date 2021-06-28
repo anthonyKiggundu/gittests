@@ -89,7 +89,7 @@ jobs:
 
       - shell: bash
         run: |
-          prodTag=`cat gitdetails.txt
+          prodTag=`cat gitdetails.txt`
           hub tag $prodTag HEAD
           hub push origin $prodTag
 #          hub tag ${{steps.newtag.outputs.newTag}} HEAD
