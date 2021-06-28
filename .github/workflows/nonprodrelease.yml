@@ -1,0 +1,84 @@
+# This is a basic workflow to help you get started with Actions
+
+name: Tagging nonprod
+# Controls when the action will run. 
+on:
+  # Triggers the workflow on push or pull request events but only for the master branch
+  push:
+    branches: 
+      - '*' #'*'
+    paths: 
+      - '.github/nonprod/'
+    tags:
+      - 'monitor-v-nonprod'
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+      - name: set working directory
+        working-directory: .github/nonprod/
+        run: echo "Now in working directory"
+      - name: set branch name
+        id: ctag
+        shell: bash
+        run: echo ::set-output name=BRANCH_NAME::$(git rev-parse --abbrev-ref HEAD)
+#        run: echo "BRANCH_NAME=$(echo ${GITHUB_HEAD_REF} | tr / -)" >> $GITHUB_ENV
+      - name: Semantic Release
+        uses: cycjimmy/semantic-release-action@v2
+        id: semantic
+        with:
+          semantic_version: 15
+          extra_plugins: |
+            @semantic-release/changelog
+            @semantic-release/git
+          branches: |
+            ['${{steps.ctag.outputs.BRANCH_NAME}}']
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GIT_AUTHOR_NAME: metro-digital-bot
+          GIT_AUTHOR_EMAIL: info@metro.digital
+          GIT_COMMITTER_NAME: metro-digital-bot
+          GIT_COMMITTER_EMAIL: info@metro.digital
+        
+      - run: echo "$OUTPUTS"
+        env:
+          OUTPUTS: ${{ toJson(steps.semantic.outputs) }}  
+          
+#      - name: get tag
+#        id: tagit
+#        run: echo ::set-output name=gittag::$(git describe --abbrev=0 --tags)
+
+#      - name: create tag
+#        id: ctag
+#        run: echo ::set-output name=vers::$(git describe --abbrev=0 --tags | cut -d '-' -f2)
+
+#      - name: final tag
+#        id: ftag
+#        run: echo ::set-output name=newTag::"monitor-"${{steps.ctag.outputs.vers}}"-prod"
+
+# --------------------------------
+#if: steps.semantic.outputs.new_release_published == 'true'
+#      - run: |
+          #echo "::`echo -n {{git tag ${{steps.ftag.outputs.newTag}} {{steps.tagit.outputs.gittag}} `"
+#          echo "Invoking Prod tagging script now"
+#          chmod +x .github/workflows/tag_prod.sh
+#          .github/workflows/tag_prod.sh ${{steps.ctag.outputs.vers}}
+
+#      - name: print tag
+#        run: echo "${{steps.tagit.outputs.gittag}} --- ${{steps.ftag.outputs.newTag}}"
+#        if: github.event.pull_request.merged == 'true'
+#        script: |
+#          ""
+#        env:
+#          TAG: monitor-v.$RELEASE_VERSION
