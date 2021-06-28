@@ -74,12 +74,13 @@ jobs:
 #        id: newtag
 #        run: echo ::set-output name=newTag::"monitor-"${{steps.newvar.outputs.vers}}"-prod"
 
-      - name: final tag
+      - name: get from artifact
         id: ftag
-        uses: actions/upload-artifact@v2
+        uses: actions/download-artifact@v2
         with:
           name: gittagging
- 
+
+      - name: get tag
         if: github.event.action == 'closed' #&& github.event.pull_request.merged == true  #&& ${{ github.ref == 'refs/heads/master' }}
         shell: bash
         run: |
