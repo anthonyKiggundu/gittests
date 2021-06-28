@@ -53,10 +53,6 @@ jobs:
           GIT_COMMITTER_NAME: metro-digital-bot
           GIT_COMMITTER_EMAIL: info@metro.digital
         
-      - run: echo "$OUTPUTS"
-        env:
-          OUTPUTS: ${{ toJson(steps.semantic.outputs) }}  
-          
       - name: get tag
         id: tagit
         run: echo ::set-output name=gittag::$(git describe --abbrev=0 --tags)
