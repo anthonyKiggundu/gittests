@@ -1,12 +1,12 @@
 {
   "repositoryUrl": "https://github.com/anthonyKiggundu/gittests",
   "release": {
-    "branches": ["*", {"channel": "true", "prerelease": true}],
+    "branches": ["dev", {"channel": "true", "prerelease": true}],
     "tagFormat": "monitor-v${version}-nonprod"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/anthonyKiggundu/gittestss.git",
+    "url": "https://github.com/anthonyKiggundu/gittests.git",
     "directory": ".github/nonprod/"
   },
   "name": "monitorv",
