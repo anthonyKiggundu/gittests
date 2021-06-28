@@ -66,10 +66,13 @@ jobs:
         id: newtag
         run: echo ::set-output name=newTag::"monitor-"${{steps.newvar.outputs.vers}}"-prod"
 
-      - run: | 
+      - name: set env vars
+        id: setvars
+        run: | 
           echo "{GIT_TAG}={steps.tagit.outputs.gittag}" >> $GITHUB_ENV
           echo "{VER_NUM}={steps.newvar.outputs.vers}" >> $GITHUB_ENV
           echo "{NEW_TAG}={steps.newtag.outputs.newTag}" >> $GITHUB_ENV
+
       - name: final tag
         id: ftag
         if: github.event.action == 'closed' #&& github.event.pull_request.merged == true  #&& ${{ github.ref == 'refs/heads/master' }}
