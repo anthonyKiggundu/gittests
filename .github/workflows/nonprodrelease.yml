@@ -10,6 +10,7 @@ on:
   pull_request:
     branches:
       - '*'
+    types: [ closed ]
 #    paths: 
 #      - '.github/nonprod/'
 
@@ -70,13 +71,16 @@ jobs:
 
       - name: final tag
         id: ftag
-        if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true && ${{ github.ref == 'refs/heads/master' }}
-        run: hub tag ${{steps.newtag.outputs.newTag}} HEAD
-
+        if: github.event.action == 'closed' && github.event.pull_request.merged == true  #&& ${{ github.ref == 'refs/heads/master' }}
+        run: |
+          hub tag ${{steps.newtag.outputs.newTag}} HEAD
+          hub push origin ${{steps.newtag.outputs.newTag}}
+# hub tag -a ${{steps.newtag.outputs.newTag}} 
 #        run: echo ::set-output name=newTag::"monitor-"${{steps.ctag.outputs.vers}}"-prod"
 #      - name: use hub as helper
 #        id: prodTag
 #        run: hub tag ${{steps.ftag.outputs.newTag}} HEAD
+#        github.event_name == 'pull_request'
 # --------------------------------
 #if: steps.semantic.outputs.new_release_published == 'true'
 #      - run: |
