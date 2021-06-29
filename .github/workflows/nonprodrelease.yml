@@ -55,7 +55,7 @@ jobs:
       
       - run: | 
           mkdir -p ~/new/artifact
-          echo $(git describe --abbrev=0 --tags|sed 's/nonprod/prod/g') >> ~/new/artifact/gitdetails.txt
+          echo $(git describe --abbrev=0 --tags|sed 's/nonprod/prod/g') > ~/new/artifact/gitdetails.txt
 
       - uses: actions/upload-artifact@v2
         with:
