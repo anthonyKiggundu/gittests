@@ -52,10 +52,14 @@ jobs:
           GIT_AUTHOR_EMAIL: info@metro.digital
           GIT_COMMITTER_NAME: metro-digital-bot
           GIT_COMMITTER_EMAIL: info@metro.digital
-      
+
+      - name: set tag
+        id: settag
+        run: echo ::set-output name=vers::$(git describe --abbrev=0 --tags |sed 's/nonprod/prod/g')
+
       - run: | 
           mkdir -p ~/new/artifact
-          echo $(git describe --abbrev=0 --tags|sed 's/nonprod/prod/g') > ~/new/artifact/gitdetails.txt
+          echo ${{steps.settag.outputs.vers}} > ~/new/artifact/gitdetails.txt
 
       - uses: actions/upload-artifact@v2
         with:
