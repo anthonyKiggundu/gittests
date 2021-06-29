@@ -101,6 +101,7 @@ jobs:
 #          path: ~/new/artifact/gitdetails.txt
 #      - name: tag 
       - if: github.event.action == 'closed'
+        shell: bash
         run: |
           prodTag=`cat ~/new/artifact/gitdetails.txt`
           echo $prodTag
