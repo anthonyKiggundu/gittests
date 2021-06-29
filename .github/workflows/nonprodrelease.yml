@@ -89,8 +89,7 @@ jobs:
 #        with:
 #          name: gittagging
     if: github.event.action == 'closed'
-      - name: get tag
-        uses: actions/download-artifact@v2
+      - uses: actions/download-artifact@v2
         with:
           name: gittagging
           path: ~/new/artifact/gitdetails.txt
