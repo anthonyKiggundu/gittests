@@ -103,6 +103,7 @@ jobs:
       - if: github.event.action == 'closed'
         run: |
           prodTag=`cat ~/new/artifact/gitdetails.txt`
+          echo $prodTag
           hub tag $prodTag HEAD
           hub push origin $prodTag
 
