@@ -53,6 +53,7 @@ jobs:
 
       - run: | 
           mkdir -p ~/new/artifact
+          echo ${{steps.settag.outputs.vers}}
           echo ${{steps.settag.outputs.vers}} > ~/new/artifact/gitdetails.txt
 
       - uses: actions/upload-artifact@v2
