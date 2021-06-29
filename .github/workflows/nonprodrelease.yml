@@ -94,7 +94,7 @@ jobs:
 #          name: gittagging
 # -----------------------------
       - name: download
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v1
         with:
           name: gittagging
           path: '~/new/**/*'
