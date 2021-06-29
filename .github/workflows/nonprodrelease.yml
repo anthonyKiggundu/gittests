@@ -89,11 +89,11 @@ jobs:
 #        with:
 #          name: gittagging
       - name: tag now
-        if: github.event.action == 'closed'
-        uses: actions/download-artifact@v2
+      - uses: actions/download-artifact@v2
         with:
           name: gittagging
           path: ~/new/artifact/gitdetails.txt
+        if: github.event.action == 'closed'
         run: |
           prodTag=`cat ~/new/artifact/gitdetails.txt`
           hub tag $prodTag HEAD
