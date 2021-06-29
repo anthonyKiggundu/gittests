@@ -26,9 +26,6 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
-      - name: set working directory
-        working-directory: .github/nonprod/
-        run: echo "Now in working directory"
       - name: set branch name
         id: ctag
         shell: bash
