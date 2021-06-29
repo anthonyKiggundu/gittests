@@ -52,25 +52,74 @@ jobs:
           GIT_AUTHOR_EMAIL: info@metro.digital
           GIT_COMMITTER_NAME: metro-digital-bot
           GIT_COMMITTER_EMAIL: info@metro.digital
-        
+      
+      - run: | 
+          mkdir -p ~/new/artifact
+          echo $(git describe --abbrev=0 --tags|sed 's/nonprod/prod/g') >> ~/new/artifact/gitdetails.txt
+
+      - uses: actions/upload-artifact@v2
+        with:
+          name: gittagging
+          path: '~/new/**/*'
+
+#      - name: get tag
+#        id: tagit
+
+#        run: echo ::set-output name=gittag::$(git describe --abbrev=0 --tags)
+#------------------------------------------
+#      - shell: bash
+#        run: |
+#          mkdir -p ~/new/artifact
+#          echo $(git describe --abbrev=0 --tags|sed 's/nonprod/prod/g') >> ~/new/artifact/gitdetails.txt
+
+ #     - name: create ver
+#        id: newvar
+#        run: echo ::set-output name=vers::$(git describe --abbrev=0 --tags | cut -d '-' -f2)
+#        uses: actions/upload-artifact@v2
+ #       shell: bash
+#        run: expr git describe --abbrev=0 --tags | cut -d '-' -f2 >> gitdetails.txt
+
+#      - name: create tag
+#        id: newtag
+#        run: echo ::set-output name=newTag::"monitor-"${{steps.newvar.outputs.vers}}"-prod"
+
+#      - name: get from artifact
+#        id: ftag
+#        uses: actions/download-artifact@v2
+#        with:
+#          name: gittagging
+# -----------------------------
+#      - name: tag now
+#        uses: actions/download-artifact@v2
+#        with:
+#          name: gittagging
+#          path: ~/new/artifact/gitdetails.txt
+#        if: github.event.action == 'closed'
+#        run: |
+#          prodTag=`cat ~/new/artifact/gitdetails.txt`
+#          hub tag $prodTag HEAD
+#          hub push origin $prodTag
+
+  prodtag:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
       - name: get tag
-        id: tagit
-        run: echo ::set-output name=gittag::$(git describe --abbrev=0 --tags)
+        uses: actions/download-artifact@v2
+        with:
+          name: gittagging
+          path: ~/new/artifact/gitdetails.txt
 
-      - name: create ver
-        id: newvar
-        run: echo ::set-output name=vers::$(git describe --abbrev=0 --tags | cut -d '-' -f2)
-
-      - name: create tag
-        id: newtag
-        run: echo ::set-output name=newTag::"monitor-"${{steps.newvar.outputs.vers}}"-prod"
-
-      - name: final tag
-        id: ftag
-#        if: github.event.action == 'closed' #&& github.event.pull_request.merged == true  #&& ${{ github.ref == 'refs/heads/master' }}
+      - name: tag now
+        if: github.event.action == 'closed' #&& github.event.pull_request.merged == true  #&& ${{ github.ref == 'refs/heads/master' }}
         run: |
-          hub tag ${{steps.newtag.outputs.newTag}} HEAD
-          hub push origin ${{steps.newtag.outputs.newTag}}
+          prodTag=`cat ~/new/artifact/gitdetails.txt`
+          hub tag $prodTag HEAD
+          hub push origin $prodTag
+
+#----------------------------------------------------
+#          hub tag ${{steps.newtag.outputs.newTag}} HEAD
+#          hub push origin ${{steps.newtag.outputs.newTag}}
 
 # hub tag -a ${{steps.newtag.outputs.newTag}} 
 #        run: echo ::set-output name=newTag::"monitor-"${{steps.ctag.outputs.vers}}"-prod"
