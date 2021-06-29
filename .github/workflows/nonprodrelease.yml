@@ -88,33 +88,34 @@ jobs:
 #        uses: actions/download-artifact@v2
 #        with:
 #          name: gittagging
-      - name: tag now
-        uses: actions/download-artifact@v2
-        with:
-          name: gittagging
-          path: ~/new/artifact/gitdetails.txt
-        if: github.event.action == 'closed'
-        run: |
-          prodTag=`cat ~/new/artifact/gitdetails.txt`
-          hub tag $prodTag HEAD
-          hub push origin $prodTag
-
-#  prodtag:
-#    needs: build
-#    runs-on: ubuntu-latest
-#    steps:
-#      - name: get tag
+# -----------------------------
+#      - name: tag now
 #        uses: actions/download-artifact@v2
 #        with:
 #          name: gittagging
 #          path: ~/new/artifact/gitdetails.txt
-
-#      - name: tag now
-#        if: github.event.action == 'closed' #&& github.event.pull_request.merged == true  #&& ${{ github.ref == 'refs/heads/master' }}
+#        if: github.event.action == 'closed'
 #        run: |
 #          prodTag=`cat ~/new/artifact/gitdetails.txt`
 #          hub tag $prodTag HEAD
 #          hub push origin $prodTag
+
+  prodtag:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: get tag
+        uses: actions/download-artifact@v2
+        with:
+          name: gittagging
+          path: ~/new/artifact/gitdetails.txt
+
+      - name: tag now
+        if: github.event.action == 'closed' #&& github.event.pull_request.merged == true  #&& ${{ github.ref == 'refs/heads/master' }}
+        run: |
+          prodTag=`cat ~/new/artifact/gitdetails.txt`
+          hub tag $prodTag HEAD
+          hub push origin $prodTag
 
 #----------------------------------------------------
 #          hub tag ${{steps.newtag.outputs.newTag}} HEAD
