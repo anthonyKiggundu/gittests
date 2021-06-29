@@ -10,7 +10,7 @@ on:
   pull_request:
     branches:
       - '*'
-    types: [ closed ]
+#    types: [ closed ]
 #    paths: 
 #      - '.github/nonprod/'
 
@@ -100,7 +100,8 @@ jobs:
           path: '~/new/**/*'
 #          path: ~/new/artifact/gitdetails.txt
 #      - name: tag 
-      - if: github.event.action == 'closed'
+#      - if: github.event.action == 'closed'
+      - if: ${{ github.ref == 'refs/heads/master' }}
         shell: bash
         run: |
           prodTag=`cat ~/new/artifact/gitdetails.txt`
