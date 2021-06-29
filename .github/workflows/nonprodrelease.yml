@@ -93,9 +93,10 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: gittagging
-          path: ~/new/artifact/gitdetails.txt
-      - name: tag 
-        if: github.event.action == 'closed'
+          path: '~/new/**/*'
+#          path: ~/new/artifact/gitdetails.txt
+#      - name: tag 
+      - if: github.event.action == 'closed'
         run: |
           prodTag=`cat ~/new/artifact/gitdetails.txt`
           hub tag $prodTag HEAD
