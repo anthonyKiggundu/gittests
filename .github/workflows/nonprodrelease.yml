@@ -103,7 +103,7 @@ jobs:
       - if: github.event.action == 'closed'
         shell: bash
         run: |
-          prodTag=$(cat ~/new/artifact/gitdetails.txt)
+          prodTag=$(<~/new/artifact/gitdetails.txt)
           echo "------> ${prodTag}"
           hub tag "${prodTag}" HEAD
           hub push origin "${prodTag}"
