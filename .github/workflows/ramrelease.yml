@@ -2,7 +2,7 @@
 name: Ram Tagging
 
 on:
-  pull_request:
+  push:
     branches:
       - '*'
     paths:
