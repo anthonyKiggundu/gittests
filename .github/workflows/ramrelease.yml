@@ -1,11 +1,12 @@
-name: Tagging nonprod
+# ram release workflow
+name: Ram Tagging
 
 on:
   pull_request:
     branches:
       - '*'
     paths:
-      - './.github/prod/**'
+      - "*"
 
 jobs:  
   build:    
@@ -17,8 +18,10 @@ jobs:
         shell: bash
         run: echo ::set-output name=BRANCH_NAME::$(git rev-parse --abbrev-ref HEAD)
       - name: Semantic Release
+        working-directory: ./.github/workflows
         uses: cycjimmy/semantic-release-action@v2
         id: semantic
+#        working-directory: ./.github/workflows
         with:
           semantic_version: 16
           extra_plugins: |
@@ -31,3 +34,5 @@ jobs:
           GIT_AUTHOR_EMAIL: info@metro.digital
           GIT_COMMITTER_NAME: metro-digital-bot
           GIT_COMMITTER_EMAIL: info@metro.digital
+
+
