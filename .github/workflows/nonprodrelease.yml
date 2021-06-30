@@ -34,29 +34,3 @@ jobs:
           GIT_AUTHOR_EMAIL: info@metro.digital
           GIT_COMMITTER_NAME: metro-digital-bot
           GIT_COMMITTER_EMAIL: info@metro.digital
-
-      - name: set tag
-        id: settag
-        run: echo ::set-output name=vers::$(git describe --tags $(git rev-list --tags --max-count=1)|sed 's/nonprod/prod/g')
-
-      - run: | 
-          mkdir -p ~/new/artifact
-          echo ${{steps.settag.outputs.vers}} > ~/new/artifact/gitdetails.txt
-
-      - uses: actions/upload-artifact@v2
-        with:
-          name: gittagging
-          path: '~/new/**/*'
-
-      - name: download
-        uses: actions/download-artifact@v1
-        with:
-          name: gittagging
-          path: '~/new/**/*'
-
-      - if: ${{ github.ref == 'refs/heads/master' }}
-        shell: bash
-        run: |
-          prodTag=`cat ~/new/artifact/gitdetails.txt`          
-          hub tag "${prodTag}" HEAD
-          hub push origin "${prodTag}"
