@@ -17,6 +17,10 @@ on:
 jobs:  
   build:    
     runs-on: ubuntu-latest    
+    defaults:
+      run:
+        shell: bash
+        working-directory: ./.github/workflows
     steps:      
       - uses: actions/checkout@v2
       - name: set branch name
@@ -26,7 +30,6 @@ jobs:
       - name: Semantic Release
         uses: cycjimmy/semantic-release-action@v2
         id: semantic
-        working-directory: ./.github/workflows
         with:
           semantic_version: 16
           extra_plugins: |
