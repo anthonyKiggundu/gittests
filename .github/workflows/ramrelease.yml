@@ -5,14 +5,14 @@ on:
   push:
     branches:
       - 'ramtests'
-    paths:
-      - "*"
+#    paths:
+#      - "*"
 
   pull_request:
     branches:
       - 'ramtests'
-    paths:
-      - "*"
+#    paths:
+#      - "*"
 
 jobs:  
   build:    
