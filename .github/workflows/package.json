@@ -1,7 +1,7 @@
 {
   "repositoryUrl": "https://github.com/anthonyKiggundu/gittests",
   "release": {
-    "branches": ["*", {"channel": "true", "prerelease": true}],
+    "branches": ["ramtests", {"channel": "true", "prerelease": true}],
     "tagFormat": "ram-v${version}-nonprod"
   },
   "repository": {

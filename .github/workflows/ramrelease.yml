@@ -4,13 +4,13 @@ name: Ram Tagging
 on:
   push:
     branches:
-      - '*'
+      - 'ramtests'
     paths:
       - "*"
 
   pull_request:
     branches:
-      - '*'
+      - 'ramtests'
     paths:
       - "*"
 
