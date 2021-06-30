@@ -7,7 +7,6 @@ on:
       - '*'
     paths:
       - "*"
-  workflow_dispatch:
 
 jobs:  
   build:    
@@ -22,7 +21,6 @@ jobs:
         working-directory: ./.github/workflows
         uses: cycjimmy/semantic-release-action@v2
         id: semantic
-#        working-directory: ./.github/workflows
         with:
           semantic_version: 16
           extra_plugins: |
