@@ -11,6 +11,9 @@ jobs:
     name: Tag latest prod release
     steps:
     - uses: actions/checkout@v2
+    - name: list files
+      shell: bash
+      run: "ls -la"
     - name: analyse and push
       id: settag
       shell: bash
