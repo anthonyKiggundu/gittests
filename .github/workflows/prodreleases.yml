@@ -11,6 +11,8 @@ jobs:
     name: Tag latest prod release
     steps:
     - uses: actions/checkout@v2
+      with:
+        fetch-depth: ''
     - name: list files
       shell: bash
       run: "ls -la"
