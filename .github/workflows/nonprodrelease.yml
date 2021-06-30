@@ -1,33 +1,22 @@
-# This is a basic workflow to help you get started with Actions
-
 name: Tagging nonprod
-# Controls when the action will run. 
+
 on: 
-  # Triggers the workflow on push or pull request events but only for the master branch
   push:
     branches: 
       - '*' 
   pull_request:
     branches:
       - '*'
-#    types: [ closed ]
 
-  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
-jobs:
-  # This workflow contains a single job called "build"
-  build:
-    # The type of runner that the job will run on
-    runs-on: ubuntu-latest
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
-    steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+jobs:  
+  build:    
+    runs-on: ubuntu-latest    
+    steps:      
       - uses: actions/checkout@v2
       - name: set branch name
-        id: ctag
+        id: currbranch
         shell: bash
         run: echo ::set-output name=BRANCH_NAME::$(git rev-parse --abbrev-ref HEAD)
       - name: Semantic Release
@@ -39,7 +28,7 @@ jobs:
             @semantic-release/changelog
             @semantic-release/git
           branches: |
-            ['${{steps.ctag.outputs.BRANCH_NAME}}']
+            ['${{steps.currbranch.outputs.BRANCH_NAME}}']
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GIT_AUTHOR_NAME: metro-digital-bot
@@ -49,12 +38,10 @@ jobs:
 
       - name: set tag
         id: settag
-#        run: echo ::set-output name=vers::$(git describe --abbrev=0 --tags |sed 's/nonprod/prod/g')
         run: echo ::set-output name=vers::$(git describe --tags $(git rev-list --tags --max-count=1)|sed 's/nonprod/prod/g')
 
       - run: | 
           mkdir -p ~/new/artifact
-          echo ${{steps.settag.outputs.vers}}
           echo ${{steps.settag.outputs.vers}} > ~/new/artifact/gitdetails.txt
 
       - uses: actions/upload-artifact@v2
@@ -62,52 +49,15 @@ jobs:
           name: gittagging
           path: '~/new/**/*'
 
-#------------------------------------------
-#      - shell: bash
-#        run: |
-#          mkdir -p ~/new/artifact
-#          echo $(git describe --abbrev=0 --tags|sed 's/nonprod/prod/g') >> ~/new/artifact/gitdetails.txt
-
- #     - name: create ver
-#        id: newvar
-#        run: echo ::set-output name=vers::$(git describe --abbrev=0 --tags | cut -d '-' -f2)
-#        uses: actions/upload-artifact@v2
- #       shell: bash
-#        run: expr git describe --abbrev=0 --tags | cut -d '-' -f2 >> gitdetails.txt
-
-#      - name: create tag
-#        id: newtag
-#        run: echo ::set-output name=newTag::"monitor-"${{steps.newvar.outputs.vers}}"-prod"
-# -----------------------------
       - name: download
         uses: actions/download-artifact@v1
         with:
           name: gittagging
           path: '~/new/**/*'
-#      - if: github.event.action == 'closed'
+
       - if: ${{ github.ref == 'refs/heads/master' }}
         shell: bash
         run: |
-          prodTag=`cat ~/new/artifact/gitdetails.txt`
-          echo "------> ${prodTag}"
+          prodTag=`cat ~/new/artifact/gitdetails.txt`          
           hub tag "${prodTag}" HEAD
           hub push origin "${prodTag}"
-
-#        run: echo ::set-output name=newTag::"monitor-"${{steps.ctag.outputs.vers}}"-prod"
-#      - name: use hub as helper
-#        id: prodTag
-#        run: hub tag ${{steps.ftag.outputs.newTag}} HEAD
-#        github.event_name == 'pull_request'
-# --------------------------------
-#if: steps.semantic.outputs.new_release_published == 'true'
-#      - run: |
-          #echo "::`echo -n {{git tag ${{steps.ftag.outputs.newTag}} {{steps.tagit.outputs.gittag}} `"
-#          echo "Invoking Prod tagging script now"
-#          chmod +x .github/workflows/tag_prod.sh
-#          .github/workflows/tag_prod.sh ${{steps.ctag.outputs.vers}}
-
-#      - name: print tag
-#        run: echo "${{steps.tagit.outputs.gittag}} --- ${{steps.ftag.outputs.newTag}}"
-#        if: github.event.pull_request.merged == 'true'
-#        script: |
-#          ""

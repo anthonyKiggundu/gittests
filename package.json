@@ -1,13 +1,12 @@
 {
   "repositoryUrl": "https://github.com/anthonyKiggundu/gittests",
   "release": {
-    "branches": ["dev", {"channel": "true", "prerelease": true}],
+    "branches": ["*", {"channel": "true", "prerelease": true}],
     "tagFormat": "monitor-v${version}-nonprod"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/anthonyKiggundu/gittests.git",
-    "directory": ".github/nonprod/"
+    "url": "https://github.com/anthonyKiggundu/gittests.git"
   },
   "name": "monitorv",
   "private": true,
@@ -39,12 +38,6 @@
       "@semantic-release/git", {
         "assets": ["package.json", "CHANGELOG.md", "*.tgz"],
         "message": "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
-      }
-    ],
-    [
-      "@semantic-release/exec", 
-      {
-        "publishCmd": "git tag monitor-v${version}-prod monitor-v${version}-nonprod"
       }
     ]
   ]
