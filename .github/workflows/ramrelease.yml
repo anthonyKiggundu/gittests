@@ -26,21 +26,23 @@ jobs:
     steps:            
       - uses: actions/checkout@v2
       - name: set branch name
-        id: currbranch
+        id: settag
         shell: bash
-        run: echo ::set-output name=BRANCH_NAME::$(git rev-parse --abbrev-ref HEAD)
-      - run: echo ${{github.workspace}}
+        echo ::set-output name=new_tag::$(git describe --tags $(git rev-list --tags --max-count=1)|sed 's/nonprod/prod/g')
+#        run: echo ::set-output name=BRANCH_NAME::$(git rev-parse --abbrev-ref HEAD)
       - name: Bump version and push tag
         id: tag_version
         uses: mathieudutour/github-tag-action@v5.5
         with:
+          tag_prefix: "ram-v"
+          append_to_pre_release_tag: "nonprod"
           github_token: ${{ secrets.GITHUB_TOKEN }}
       - name: Create a GitHub release
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: $(git describe --tags $(git rev-list --tags --max-count=1)|sed 's/nonprod/prod/g') #${{ steps.tag_version.outputs.new_tag }}
+          tag_name: ${{ steps.settag.outputs.new_tag }}
           release_name: Release ${{ steps.tag_version.outputs.new_tag }}
           body: ${{ steps.tag_version.outputs.changelog }}
 #      - name: Semantic Release
