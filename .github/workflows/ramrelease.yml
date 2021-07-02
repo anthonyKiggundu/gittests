@@ -41,7 +41,9 @@ jobs:
       - name: rectify tag
         id: settag
         shell: bash
-        run: echo ${{steps.tag_version.outputs.new_tag}}%.*
+        run: |
+          echo ${{steps.tag_version.outputs.new_tag}}%.*
+          echo ${steps.tag_version.outputs.new_tag//%.*}
 
       - name: Create a GitHub release
         uses: actions/create-release@v1
@@ -60,7 +62,7 @@ jobs:
 #          newversion=${version%.*}
 #          hub tag "${newversion}" HEAD
 #          hub tag -d "${oldversion}"
-#          hub push origin "${newversion}"
+#          hub push origin "${newversion}" :refs/tags/${oldversion}
            
 #      - name: Semantic Release
 #        uses: cycjimmy/semantic-release-action@v2
