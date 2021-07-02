@@ -8,7 +8,8 @@ on:
     branches:
       - 'ramtests'
     paths:
-      - '.github/ram/**'
+      - '**/ram/**'
+ #     - '.github/ram/**'
 
   pull_request:
     branches:
