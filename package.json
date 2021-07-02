@@ -8,6 +8,6 @@
     ".github/ram/*"
   ],
   "release": {
-    "extends": "semantic-release-monorepo"
+    "extends": "multi-semantic-release"
   }
 }
