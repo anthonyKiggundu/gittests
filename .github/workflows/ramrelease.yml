@@ -42,9 +42,10 @@ jobs:
         id: settag
         shell: bash
         run: |
+          echo ::set-output name=VERSION::$(echo $steps.tag_version.outputs.new_tag%.*)
           echo ${{steps.tag_version.outputs.new_tag}}%.*
-          echo ${{steps.tag_version.outputs.new_tag//%.*}}
 
+      - run: echo ${{steps.settag.outputs.VERSION}}
       - name: Create a GitHub release
         uses: actions/create-release@v1
         env:
