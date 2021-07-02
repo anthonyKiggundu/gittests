@@ -46,6 +46,7 @@ jobs:
           release_name: Release ${{ steps.tag_version.outputs.new_tag }}
           body: ${{ steps.tag_version.outputs.changelog }}
       - name: rectify tag
+        uses: actions/checkout@v2
         id: settag
         shell: bash
         run: |
