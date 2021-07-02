@@ -53,6 +53,12 @@ jobs:
           tag_name: ${{ steps.settag.outputs.VERSION}}
           release_name: Release ${{ steps.tag_version.outputs.new_tag }}
           body: ${{ steps.tag_version.outputs.changelog }}
+      - run: |
+#          oldversion=$(git describe --tags $(git rev-list --tags --max-count=1))
+#          newversion=${version%.*}
+#          hub tag "${newversion}" HEAD
+          hub tag -d ${{ steps.tag_version.outputs.new_tag }}
+          hub push origin :refs/tags/${{ steps.tag_version.outputs.new_tag }}
 
 #      - name: rectify tag
 #        id: settag
