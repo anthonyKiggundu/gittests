@@ -3,8 +3,8 @@
   "name": "multi-semantic-release",
   "private": true,
   "workspaces": [
-    ".github/prod/*",
-    ".github/nonprod/*",
-    ".github/ram/*"
+    ".github/prod/package.json",
+    ".github/nonprod/package.json",
+    ".github/ram/package.json"
   ]
 }
