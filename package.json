@@ -1,0 +1,12 @@
+{
+  "repositoryUrl": "https://github.com/anthonyKiggundu/gittests",
+  "name": "multi-semantic-release",
+  "private": true,
+  "workspaces": [
+    ".github/prod/*",
+    ".github/nonprod/*",
+    ".github/ram/*"
+  ],
+  "release": {
+    "extends": "semantic-release-monorepo"
+}
