@@ -40,9 +40,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_prefix : "ram-v"
-          append_to_pre_release_tag: "nonprod"
-          tag_name: ${{ steps.tag_version.outputs.new_tag }}
+          tag_name: $(git describe --tags $(git rev-list --tags --max-count=1)|sed 's/nonprod/prod/g') #${{ steps.tag_version.outputs.new_tag }}
           release_name: Release ${{ steps.tag_version.outputs.new_tag }}
           body: ${{ steps.tag_version.outputs.changelog }}
 #      - name: Semantic Release
