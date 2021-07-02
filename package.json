@@ -9,4 +9,5 @@
   ],
   "release": {
     "extends": "semantic-release-monorepo"
+  }
 }
