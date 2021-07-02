@@ -5,8 +5,8 @@ on:
   push:
     branches:
       - 'ramtests'
-    paths:
-      - ".github/ram/**"
+#    paths:
+#      - ".github/ram/**"
 
   pull_request:
     branches:
