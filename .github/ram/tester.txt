@@ -6,3 +6,6 @@ Okay seems like on path works but not using the right json file to create the ta
 
 Another test run
 
+Try github actions tagging concept
+
+
