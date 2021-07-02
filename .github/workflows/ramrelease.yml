@@ -9,7 +9,6 @@ on:
       - 'ramtests'
     paths:
       - '**/ram/**'
- #     - '.github/ram/**'
 
   pull_request:
     branches:
@@ -41,6 +40,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
+          tag_prefix : "ram-v"
+          append_to_pre_release_tag: "nonprod"
           tag_name: ${{ steps.tag_version.outputs.new_tag }}
           release_name: Release ${{ steps.tag_version.outputs.new_tag }}
           body: ${{ steps.tag_version.outputs.changelog }}
