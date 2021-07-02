@@ -6,8 +6,5 @@
     ".github/prod/*",
     ".github/nonprod/*",
     ".github/ram/*"
-  ],
-  "release": {
-    "extends": "multi-semantic-release"
-  }
+  ]
 }
