@@ -2,3 +2,5 @@ I want to only trigger here when this directory changes
 
 Now test if this triggers a run
 
+Okay seems like on path works but not using the right json file to create the tags
+
