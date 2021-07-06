@@ -48,7 +48,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ steps.settag.outputs.VERSION}}
+          tag_name: ${{ steps.tag_version.outputs.new_tag }} #${{ steps.settag.outputs.VERSION}}
           release_name: Release ${{ steps.tag_version.outputs.new_tag }}
           body: ${{ steps.tag_version.outputs.changelog }}
       - run: |
