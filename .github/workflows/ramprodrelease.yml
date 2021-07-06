@@ -36,11 +36,11 @@ jobs:
           append_to_pre_release_tag: "prod"
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: rectify tag
-        id: settag
-        shell: bash
-        run: |
-          echo ::set-output name=VERSION::$(echo ${{steps.tag_version.outputs.new_tag}} | awk '{ print substr( $0, 1, length($0)-2 ) }')
+#      - name: rectify tag
+#        id: settag
+#        shell: bash
+#        run: |
+#          echo ::set-output name=VERSION::$(echo ${{steps.tag_version.outputs.new_tag}} | awk '{ print substr( $0, 1, length($0)-2 ) }')
 
 #      - run: echo ${{steps.settag.outputs.VERSION}}
       - name: Create a GitHub release
