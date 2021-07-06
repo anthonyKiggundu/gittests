@@ -1,27 +1,5 @@
 I want to only trigger here when this directory changes
 
-Now test if this triggers a run
-
-Okay seems like on path works but not using the right json file to create the tags
-
-Another test run
-
-Try github actions tagging concept
-
-Okay guys, let us see what we have here now
-
-Get me some more stuff to add here
-
-
-And now give it a try again
-
-I am back 
-
-Required: tag name
-
-Will this be the last commit
-
-
 -------------------------------------------------------
 
 Starting a new page
