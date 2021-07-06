@@ -1,5 +1,5 @@
 # ram release workflow
-name: Prod: Ram Tagging
+name: Prod Ram Tagging
 
 on:
   push:
