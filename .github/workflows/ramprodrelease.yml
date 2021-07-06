@@ -2,17 +2,17 @@
 name: Prod Ram Tagging
 
 on:
-#  push:
-#    branches:
-#      - 'master'
-#    paths:
-#      - '**/ram/**'
-
-  pull_request:
+  push:
     branches:
       - 'master'
     paths:
       - '**/ram/**'
+
+#  pull_request:
+#    branches:
+#      - 'master'
+#    paths:
+#      - '**/ram/**'
 
 jobs:  
   build:    
