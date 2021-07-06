@@ -4,8 +4,8 @@ on:
   pull_request:
     branches:
       - '*'
-    paths:
-      - './.github/prod/**'
+#    paths:
+#      - './.github/prod/**'
 
 jobs:  
   build:    
