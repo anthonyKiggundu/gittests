@@ -1,18 +1,16 @@
 # ram release workflow
-name: Ram Tagging
+name: Ram Nonprod Tagging
 
 on:
-  create:
-    tags: "ram-$(version)-nonprod"
   push:
     branches:
       - '*'
     paths:
       - '**/ram/**'
 
-  pull_request:
-    branches:
-      - 'ramtests'
+#  pull_request:
+#    branches:
+#      - 'ramtests'
 #    paths:
 #      - "*"
 
