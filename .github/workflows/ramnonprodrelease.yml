@@ -1,18 +1,16 @@
 # ram release workflow
-name: Ram Tagging
+name: Ram Nonprod Tagging
 
 on:
-  create:
-    tags: "ram-$(version)-nonprod"
   push:
     branches:
       - '*'
     paths:
       - '**/ram/**'
 
-  pull_request:
-    branches:
-      - 'ramtests'
+#  pull_request:
+#    branches:
+#      - 'ramtests'
 #    paths:
 #      - "*"
 
@@ -53,8 +51,9 @@ jobs:
           tag_name: ${{ steps.settag.outputs.VERSION}}
           release_name: Release ${{ steps.tag_version.outputs.new_tag }}
           body: ${{ steps.tag_version.outputs.changelog }}
-      - run: |
-          hub tag -d ${{ steps.tag_version.outputs.new_tag }}
+# -----------------------------------------
+#      - run: |
+#          hub tag -d ${{ steps.tag_version.outputs.new_tag }}
 #          hub push origin #:refs/tags/${{ steps.tag_version.outputs.new_tag }}
 
 #      - name: rectify tag

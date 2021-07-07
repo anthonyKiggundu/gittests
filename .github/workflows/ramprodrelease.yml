@@ -2,7 +2,7 @@
 name: Prod Ram Tagging
 
 on:
-  push:
+  pull_request:
     branches:
       - 'master'
     paths:
@@ -51,6 +51,7 @@ jobs:
           tag_name: ${{ steps.tag_version.outputs.new_tag }} #${{ steps.settag.outputs.VERSION}}
           release_name: Release ${{ steps.tag_version.outputs.new_tag }}
           body: ${{ steps.tag_version.outputs.changelog }}
-      - run: |
-          hub tag -d ${{ steps.tag_version.outputs.new_tag }}
+# -----------------------------
+#      - run: |
+#          hub tag -d ${{ steps.tag_version.outputs.new_tag }}
 #          hub push origin #:refs/tags/${{ steps.tag_version.outputs.new_tag }}
