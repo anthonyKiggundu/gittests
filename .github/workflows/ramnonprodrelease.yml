@@ -40,7 +40,8 @@ jobs:
         id: setbranch
         shell: bash
         run: |
-          echo ::set-output name=version::$(echo ${{steps.tag_version.outputs.new_tag}} | awk '{ print substr( $0, 1, length($0)-2 ) }')
+#          echo ::set-output name=version::$(echo ${{steps.tag_version.outputs.new_tag}} | awk '{ print substr( $0, 1, length($0)-2 ) }')
+          version=$(echo ${{steps.tag_version.outputs.new_tag}} | awk '{ print substr( $0, 1, length($0)-2 ) }')
           hub tag "${version}" HEAD
           hub push origin "${version}"
 #        echo ::set-output name=new_tag::$(git describe --tags $(git rev-list --tags --max-count=1)|sed 's/nonprod/prod/g')
