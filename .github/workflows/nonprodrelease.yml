@@ -6,7 +6,7 @@ on:
       - '*'
     paths:
       - '**'
-      - '!**/ram/**'
+#      - '!**/ram/**'
 
 jobs:  
   build:    
