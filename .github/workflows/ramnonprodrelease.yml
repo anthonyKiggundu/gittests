@@ -36,6 +36,16 @@ jobs:
           tag_prefix: "ram-v"
           append_to_pre_release_tag: "nonprod"
           github_token: ${{ secrets.GITHUB_TOKEN }}
+      - name: set branch name
+        id: setbranch
+        shell: bash
+        run: |
+          echo ::set-output name=version::$(echo ${{steps.tag_version.outputs.new_tag}} | awk '{ print substr( $0, 1, length($0)-2 ) }')
+          hub tag "${version}" HEAD
+          hub push origin "${version}"
+#        echo ::set-output name=new_tag::$(git describe --tags $(git rev-list --tags --max-count=1)|sed 's/nonprod/prod/g')
+#        run: echo ::set-output name=BRANCH_NAME::$(git rev-parse --abbrev-ref HEAD)
+
 #      - name: Create a GitHub release
 #        uses: actions/create-release@v1
 #        env:
