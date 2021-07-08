@@ -8,12 +8,6 @@ on:
     paths:
       - '**/ram/**'
 
-#  pull_request:
-#    branches:
-#      - 'ramtests'
-#    paths:
-#      - "*"
-
 jobs:  
   build:    
     runs-on: ubuntu-latest    
@@ -23,34 +17,42 @@ jobs:
         working-directory: ./.github/ram/
     steps:            
       - uses: actions/checkout@v2
-      - name: set branch name
-        id: setbranch
-        shell: bash
-#        echo ::set-output name=new_tag::$(git describe --tags $(git rev-list --tags --max-count=1)|sed 's/nonprod/prod/g')
-        run: echo ::set-output name=BRANCH_NAME::$(git rev-parse --abbrev-ref HEAD)
+        with:
+          fetch-depth: 0
+
       - name: Bump version and push tag
         id: tag_version
         uses: mathieudutour/github-tag-action@v5.5
         with:
+          default_bump: false
           tag_prefix: "ram-v"
           append_to_pre_release_tag: "nonprod"
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: rectify tag
-        id: settag
+      - name: set branch name
+        id: setbranch
         shell: bash
         run: |
-          echo ::set-output name=VERSION::$(echo ${{steps.tag_version.outputs.new_tag}} | awk '{ print substr( $0, 1, length($0)-2 ) }')
+          echo
+          version=$(echo ${{steps.tag_version.outputs.new_tag}} | awk '{ print substr( $0, 1, length($0)-2 ) }')
+          hub tag "${version}" HEAD
+          hub push origin "${version}"
+          echo ::set-output name=del_tag::$(git tag -d ${{ steps.tag_version.outputs.new_tag }})
+         
+#          hub tag -d :refs/tags/${{ steps.tag_version.outputs.new_tag }}
+
+#        echo ::set-output name=new_tag::$(git describe --tags $(git rev-list --tags --max-count=1)|sed 's/nonprod/prod/g')
+#        run: echo ::set-output name=BRANCH_NAME::$(git rev-parse --abbrev-ref HEAD)
 
 #      - run: echo ${{steps.settag.outputs.VERSION}}
-      - name: Create a GitHub release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{ steps.settag.outputs.VERSION}}
-          release_name: Release ${{ steps.tag_version.outputs.new_tag }}
-          body: ${{ steps.tag_version.outputs.changelog }}
+#      - name: Create a GitHub release
+#        uses: actions/create-release@v1
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#        with:
+#          tag_name: ${{ steps.settag.outputs.VERSION}}
+#          release_name: Release ${{ steps.tag_version.outputs.new_tag }}
+#          body: ${{ steps.tag_version.outputs.changelog }}
 # -----------------------------------------
 #      - run: |
 #          hub tag -d ${{ steps.tag_version.outputs.new_tag }}
@@ -65,21 +67,3 @@ jobs:
 #          hub tag "${newversion}" HEAD
 #          hub tag -d "${oldversion}"
 #          hub push origin "${newversion}" :refs/tags/${oldversion}
-           
-#      - name: Semantic Release
-#        uses: cycjimmy/semantic-release-action@v2
-#        id: semantic
-#        with:
-#          semantic_version: 16
-#          extra_plugins: |
-#            @semantic-release/changelog
-#            @semantic-release/git
-#          branches: |
-#            ['${{steps.currbranch.outputs.BRANCH_NAME}}']
-#        env:
-#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#          GIT_AUTHOR_EMAIL: info@metro.digital
-#          GIT_COMMITTER_NAME: metro-digital-bot
-#          GIT_COMMITTER_EMAIL: info@metro.digital
-
-
