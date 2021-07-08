@@ -1,7 +1,7 @@
 name: Monitoring Tagging nonprod
 
 on:
-  pull_request:
+  push:
     branches:
       - '*'
     paths:
