@@ -1,7 +1,7 @@
 name: Monitor Tagging prod
 
 on: 
-  push:
+  pull_request:
     branches: 
       - 'master'
     paths:
