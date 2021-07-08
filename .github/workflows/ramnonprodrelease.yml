@@ -42,9 +42,8 @@ jobs:
           echo
           version=$(echo ${{steps.tag_version.outputs.new_tag}} | awk '{ print substr( $0, 1, length($0)-2 ) }')
           hub tag "${version}" HEAD
-          hub tag -d ${{ steps.tag_version.outputs.new_tag }}
           hub push origin "${version}"
-#          hub tag -d :refs/tags/${{ steps.tag_version.outputs.new_tag }}
+          hub tag -d :refs/tags/${{ steps.tag_version.outputs.new_tag }}
 #        echo ::set-output name=new_tag::$(git describe --tags $(git rev-list --tags --max-count=1)|sed 's/nonprod/prod/g')
 #        run: echo ::set-output name=BRANCH_NAME::$(git rev-parse --abbrev-ref HEAD)
 
