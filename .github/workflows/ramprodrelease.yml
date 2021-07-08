@@ -17,10 +17,6 @@ jobs:
         working-directory: ./.github/ram/
     steps:            
       - uses: actions/checkout@v2
-      - name: set branch name
-        id: setbranch
-        shell: bash
-        run: echo ::set-output name=BRANCH_NAME::$(git rev-parse --abbrev-ref HEAD)
       - name: Bump version and push tag
         id: tag_version
         uses: mathieudutour/github-tag-action@v5.5
