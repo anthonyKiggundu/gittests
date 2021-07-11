@@ -11,10 +11,6 @@ on:
 jobs:  
   build:    
     runs-on: ubuntu-latest    
-    defaults:
-      run:
-        shell: bash
-        working-directory: ./.github/ram/
     steps:            
       - uses: actions/checkout@v2
       - name: Bump version and push tag
@@ -24,6 +20,7 @@ jobs:
           tag_prefix: "ram-v"
           append_to_pre_release_tag: "prod"
           github_token: ${{ secrets.GITHUB_TOKEN }}
+
       - name: set branch name
         id: setbranch
         shell: bash
@@ -32,9 +29,15 @@ jobs:
           version=$(echo ${{steps.tag_version.outputs.new_tag}} | awk '{ print substr( $0, 1, length($0)-2 ) }')
           hub tag "${version}" HEAD
           hub push origin "${version}"
-#          hub tag -d :refs/tags/${{ steps.tag_version.outputs.new_tag }}
 
-# -----------------------------
-#      - run: |
-#          hub tag -d ${{ steps.tag_version.outputs.new_tag }}
-#          hub push origin #:refs/tags/${{ steps.tag_version.outputs.new_tag }}
+      - name: cleanup bad tag
+        uses: actions/github-script@v3
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}          
+          script: |
+            github.git.deleteRef({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref: "tags/${{ steps.tag_version.outputs.new_tag }}"
+            })
+
