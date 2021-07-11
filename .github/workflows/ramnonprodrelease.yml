@@ -37,7 +37,17 @@ jobs:
           version=$(echo ${{steps.tag_version.outputs.new_tag}} | awk '{ print substr( $0, 1, length($0)-2 ) }')
           hub tag "${version}" HEAD
           hub push origin "${version}"
-          echo ::set-output name=del_tag::$(git tag -d ${{ steps.tag_version.outputs.new_tag }})
+
+      - name: cleanup bad tag
+        uses: actions/github-script@v3
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}          
+          script: |
+            github.git.deleteRef({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref: "tags/${{ steps.tag_version.outputs.new_tag }}"
+            })
          
 #          hub tag -d :refs/tags/${{ steps.tag_version.outputs.new_tag }}
 
