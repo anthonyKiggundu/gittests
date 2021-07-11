@@ -11,10 +11,6 @@ on:
 jobs:  
   build:    
     runs-on: ubuntu-latest    
-    defaults:
-      run:
-        shell: bash
-        working-directory: ./.github/ram/
     steps:            
       - uses: actions/checkout@v2
         with:
@@ -49,31 +45,3 @@ jobs:
               ref: "tags/${{ steps.tag_version.outputs.new_tag }}"
             })
          
-#          hub tag -d :refs/tags/${{ steps.tag_version.outputs.new_tag }}
-
-#        echo ::set-output name=new_tag::$(git describe --tags $(git rev-list --tags --max-count=1)|sed 's/nonprod/prod/g')
-#        run: echo ::set-output name=BRANCH_NAME::$(git rev-parse --abbrev-ref HEAD)
-
-#      - run: echo ${{steps.settag.outputs.VERSION}}
-#      - name: Create a GitHub release
-#        uses: actions/create-release@v1
-#        env:
-#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#        with:
-#          tag_name: ${{ steps.settag.outputs.VERSION}}
-#          release_name: Release ${{ steps.tag_version.outputs.new_tag }}
-#          body: ${{ steps.tag_version.outputs.changelog }}
-# -----------------------------------------
-#      - run: |
-#          hub tag -d ${{ steps.tag_version.outputs.new_tag }}
-#          hub push origin #:refs/tags/${{ steps.tag_version.outputs.new_tag }}
-
-#      - name: rectify tag
-#        id: settag
-#        shell: bash
-#        run: |
-#          oldversion=$(git describe --tags $(git rev-list --tags --max-count=1))
-#          newversion=${version%.*}
-#          hub tag "${newversion}" HEAD
-#          hub tag -d "${oldversion}"
-#          hub push origin "${newversion}" :refs/tags/${oldversion}
