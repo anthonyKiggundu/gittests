@@ -26,7 +26,8 @@ jobs:
         shell: bash
         run: |
           echo
-          version=$(echo ${{steps.tag_version.outputs.new_tag}} | awk '{ print substr( $0, 1, length($0)-2 ) }')
+#          version=$(echo ${{steps.tag_version.outputs.new_tag}} | awk '{ print substr( $0, 1, length($0)-2 ) }')
+          version=$(git describe --tags $(git rev-list --tags --max-count=1)|sed 's/nonprod/prod/g')
           hub tag "${version}" HEAD
           hub push origin "${version}"
 
