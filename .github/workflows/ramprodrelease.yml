@@ -13,30 +13,30 @@ jobs:
     runs-on: ubuntu-latest    
     steps:            
       - uses: actions/checkout@v2
-      - name: Bump version and push tag
-        id: tag_version
-        uses: mathieudutour/github-tag-action@v5.5
-        with:
-          tag_prefix: "ram-v"
-          append_to_pre_release_tag: "prod"
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+#      - name: Bump version and push tag
+#        id: tag_version
+#        uses: mathieudutour/github-tag-action@v5.5
+#        with:
+#          tag_prefix: "ram-v"
+#          append_to_pre_release_tag: "prod"
+#          github_token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: set branch name
         id: setbranch
         shell: bash
         run: |
-          echo version=$(git describe --tags $(git rev-list --tags --max-count=1)|sed 's/nonprod/prod/g')
+          echo version=$(git remote update;git describe --abbrev=0 --tags |sed 's/nonprod/prod/g')
           hub tag "${version}" HEAD
           hub push origin "${version}"
 
-      - name: cleanup bad tag
-        uses: actions/github-script@v3
-        with:
-          github-token: ${{secrets.GITHUB_TOKEN}}          
-          script: |
-            github.git.deleteRef({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              ref: "tags/${{ steps.tag_version.outputs.new_tag }}"
-            })
+#      - name: cleanup bad tag
+#        uses: actions/github-script@v3
+#        with:
+#          github-token: ${{secrets.GITHUB_TOKEN}}          
+#          script: |
+#            github.git.deleteRef({
+#              owner: context.repo.owner,
+#              repo: context.repo.repo,
+#              ref: "tags/${{ steps.tag_version.outputs.new_tag }}"
+#            })
 
