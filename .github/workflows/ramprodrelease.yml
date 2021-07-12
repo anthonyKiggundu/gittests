@@ -2,7 +2,7 @@
 name: Ram Prod Tagging
 
 on:
-  pull_request:
+  push:
     branches:
       - 'master'
     paths:

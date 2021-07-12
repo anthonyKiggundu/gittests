@@ -1,11 +1,13 @@
 name: Monitor Tagging prod
 
 on: 
-  pull_request:
+  push:
     branches: 
       - 'master'
-    paths:
-      - '**'
+    paths-ignore:
+      - '**/ram/**'
+#    paths:
+#      - '**'
 
 jobs: 
   tag:
@@ -13,8 +15,8 @@ jobs:
     name: Tag latest prod release
     steps:
     - uses: actions/checkout@v2
-#      with:
-#        fetch-depth: 0
+      with:
+        fetch-depth: 0
     - name: analyse and push
       id: settag
       shell: bash
