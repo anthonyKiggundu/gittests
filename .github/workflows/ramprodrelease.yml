@@ -25,7 +25,7 @@ jobs:
         id: setbranch
         shell: bash
         run: |
-          echo version=$(git remote update;git describe --abbrev=0 --tags |sed 's/nonprod/prod/g')
+          echo version=$(git remote update $(git describe --abbrev=0 --tags)|sed 's/nonprod/prod/g')
           hub tag "${version}" HEAD
           hub push origin "${version}"
 
