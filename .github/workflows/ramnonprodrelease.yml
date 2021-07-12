@@ -22,7 +22,11 @@ jobs:
           append_to_pre_release_tag: "nonprod"
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: set branch name
+#      - name: set branch name
+#        id: setbranch
+#        shell: bash
+      - if: ${{ github.ref != 'refs/heads/master' }} # if: github.ref != 'refs/heads/master' #github.events.push == true
+        name: set branch name
         id: setbranch
         shell: bash
         run: |
