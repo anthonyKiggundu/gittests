@@ -22,7 +22,7 @@ jobs:
           append_to_pre_release_tag: "prod"
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
-        run: |
+      - run: |
           echo
           version=$(echo ${{steps.tag_version.outputs.new_tag}} | awk '{ print substr( $0, 1, length($0)-2 ) }')
           hub tag "${version}" HEAD
