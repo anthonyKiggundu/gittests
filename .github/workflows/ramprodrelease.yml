@@ -24,7 +24,7 @@ jobs:
 
       - run: |
           echo
-          version=$(echo ${{steps.tag_version.outputs.new_tag}} | awk '{ print substr( $0, 1, length($0)-2 ) }')
+          version=$(echo ${{steps.tag_version.outputs.new_tag}}"-prod") #| awk '{ print substr( $0, 1, length($0)-2 ) }')
           hub tag "${version}" HEAD
           hub push origin "${version}"
 
