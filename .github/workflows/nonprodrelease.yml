@@ -4,8 +4,9 @@ on:
   push:
     branches:
       - '*'
-    paths_ignore:
-      - '**/ram/**'
+    paths:
+      - '**'
+      - '!**/ram/**'
 #    paths:
 #      - '**'
 jobs:  
